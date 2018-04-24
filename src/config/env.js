@@ -70,6 +70,10 @@ const DOMAIN = (() => {
 // api
 // 登录
 const EXAM_LOGIN = `${DECLARE_BASE_URL}publics/examinee/login`;
+// 获取考试题目
+const EXAM_ALLSUBJECTS = `${EXAM_BASE_URL}exams/declareexamination/allsubjects/`;
+// 考生答题提交
+const EXAM_SUBMISSION = `${EXAM_BASE_URL}/exams/declareexamination/submission`;
 
 export {
   test,
@@ -80,4 +84,6 @@ export {
   IMAGE_SERVER_URL,
   DOMAIN,
   EXAM_LOGIN,
+  EXAM_ALLSUBJECTS,
+  EXAM_SUBMISSION,
 };

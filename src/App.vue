@@ -16,7 +16,7 @@ export default {
     checkLogin() {
       const arr = ['login'];
       const skip = this.match(arr);
-      if (!skip && !getCookie('exam_user')) {
+      if (!skip && !getCookie('sb_token')) {
         // 如果没有登录状态则跳转到登录页
         this.$router.push(`/login/${window.sessionStorage.getItem('exam_id')}`);
       }

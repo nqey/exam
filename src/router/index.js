@@ -26,7 +26,7 @@ export default new Router({
       component: login,
     },
     {
-      path: '/login/msg',
+      path: '/msg',
       name: 'loginMsg',
       component: loginMsg,
     },

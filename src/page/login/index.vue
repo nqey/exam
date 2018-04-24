@@ -45,7 +45,7 @@
             <div class="form-pding row clearfix">
               <div class="col-md-3 form-rig"> </div>
               <div class="col-md-9">
-                <button class="btn" @click="login">提交</button>
+                <button class="btn" @click="login" type="button">提交</button>
               </div>
             </div>
           </form>
@@ -76,14 +76,16 @@ export default {
     async login() {
       const res = await this.$xhr('post', EXAM_LOGIN, this.param);
       if (res.data.code === 0) {
-        setCookie('username', this.username, 1000 * 60);
-        setCookie('exam_user', res.data.data.token, 1000 * 60);
-        this.$router.push('/login/msg');
+        setCookie('sb_token', res.data.data.token, 1000 * 60);
+        window.sessionStorage.setItem('username', this.param.name);
+        window.sessionStorage.setItem('idnumber', this.param.idnumber);
+        window.sessionStorage.setItem('cellphone', this.param.cellphone);
+        window.sessionStorage.setItem('exam_id', this.$route.params.id);
+        this.$router.push('/msg');
       }
     },
   },
   mounted() {
-    window.sessionStorage.setItem('exam_id', this.$route.params.id);
   },
 };
 </script>

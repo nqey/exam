@@ -8,7 +8,7 @@
     <section class="content">
       <div class="container">
         <div class="yz_correct">
-          <div class="text-center"> <img src="images/correct_img.png">
+          <div class="text-center"> <img :src="correctImg">
             <h4>试卷提交成功</h4>
           </div>
           <div class="row clearfix">
@@ -16,17 +16,17 @@
               <div class="dfxx">
                 <ul>
                   <li class="row clearfix">
-                    <div class="col-md-6">一、单选题：得分 <span class="color_qf">35</span>分</div>
-                    <div class="col-md-6">错误题号：<span class="red">1题、3题、5题</span></div>
+                    <div class="col-md-6">一、单选题：得分 <span class="color_qf">{{rs.single.score}}</span>分</div>
+                    <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.single.errorSubjectSortList">{{v}}题&nbsp;</span></div>
                   </li>
                   <li class="row clearfix">
-                    <div class="col-md-6">二、多选题：得分 <span class="color_qf">35</span>分</div>
-                    <div class="col-md-6">错误题号：<span class="red">1题、3题、5题</span></div>
+                    <div class="col-md-6">二、多选题：得分 <span class="color_qf">{{rs.multiple.score}}</span>分</div>
+                    <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.multiple.errorSubjectSortList">{{v}}题&nbsp;</span></div>
                   </li>
-                  <li class="row clearfix">
+            <!--       <li class="row clearfix">
                     <div class="col-md-6">三、判断题：得分 <span class="color_qf">35</span>分</div>
                     <div class="col-md-6">错误题号：<span class="green">无</span></div>
-                  </li>
+                  </li> -->
                   <li class="row clearfix">
                     <div class="col-md-12">四、简答题：(需要人工评分,请关注申报机构公共业务后台查询最终分数)</div>
                   </li>
@@ -34,9 +34,9 @@
               </div>
             </div>
           </div>
-          <div class="text-center">
+         <!--  <div class="text-center">
             <button class="btn">确认</button>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>
@@ -44,17 +44,20 @@
 </template>
 
 <script>
+import correctImg from '@/assets/img/correct_img.png';
 
 export default {
   name: 'exam',
   data() {
     return {
+      correctImg,
+      rs: '',
     };
   },
   methods: {
   },
   mounted() {
-    window.sessionStorage.getItem('exam_id');
+    this.rs = JSON.parse(window.sessionStorage.getItem('exam_rs'));
   },
 };
 </script>
