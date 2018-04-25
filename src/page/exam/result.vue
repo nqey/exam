@@ -2,7 +2,9 @@
   <div>
     <header class="header">
       <div class="container">
-        <h2 class="text-center">中国商品诚信数据库第一批申报关考试</h2>
+        <h2 class="text-center">{{examName}}</h2>
+        <br/>
+        <p class="text-center">{{illustrate}}</p>
       </div>
     </header>
     <section class="content">
@@ -51,6 +53,8 @@ export default {
   data() {
     return {
       correctImg,
+      examName: '',
+      illustrate: '',
       rs: '',
     };
   },
@@ -58,6 +62,8 @@ export default {
   },
   mounted() {
     this.rs = JSON.parse(window.sessionStorage.getItem('exam_rs'));
+    this.examName = JSON.parse(window.sessionStorage.getItem('examName'));
+    this.illustrate = JSON.parse(window.sessionStorage.getItem('illustrate'));
   },
 };
 </script>

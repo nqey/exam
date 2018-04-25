@@ -85,8 +85,8 @@
             </div>
             -->
           </div> 
-          <div class="div_title_cut_question"><b>二、简答题</b></div>
-          <div class="div_question"> 
+          <div class="div_title_cut_question" v-if="essayQS.length > 0"><b>二、简答题</b></div>
+          <div class="div_question" v-if="essayQS.length > 0"> 
             <!-- <div class="div_table_radio_question">
               <div class="div_title_question_all">
                 <div class="div_title_question"><span class="number">1、</span>对中国商品诚信数据库的了解。<span class="req">&nbsp;*（分值：10分）</span></div>
@@ -227,6 +227,8 @@ export default {
       const res = await this.$xhr('post', EXAM_SUBMISSION, param);
       if (res.data.code === 0) {
         window.sessionStorage.setItem('exam_rs', JSON.stringify(res.data.data));
+        window.sessionStorage.setItem('examName', this.examName);
+        window.sessionStorage.setItem('illustrate', this.illustrate);
         this.$router.push('/exam/result');
       }
     },
