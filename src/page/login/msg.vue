@@ -7,10 +7,8 @@
   </header>
   <section class="content content-bj">
     <div class="container text-center">
-      <h3>中国商品诚信数据库第一批申报官考试</h3>
-      <p>考试说明：“试卷结构”和“考试内容与要求”部分保持不变。“参考样题”有部分更新 ，突出主干和重点知识，以人类历史的发展演变和重大事件为主要考查载体，
-        重在考查学科素养与学科思维水平。贴近教学实际，从历史角度关照社会与现实。强调学科思想与基本方法，注重考查学生运用基础知识、
-        基本方法，从不同角度发现问题、分析问题和解决问题的能力。</p>
+      <h3>{{examName}}</h3>
+      <p>{{illustrate}}</p>
     </div>
   </section>
   <section class="content">
@@ -27,14 +25,25 @@
 <script>
 import logo from '@/assets/img/logo.png';
 import correct from '@/assets/img/correct_img.png';
+import { EXAM_LOGININFO } from '@/config/env';
 
 export default {
   name: 'msg',
   data() {
     return {
       logo,
+      examName: '',
+      illustrate: '',
+      id: window.sessionStorage.getItem('exam_id'),
       correct,
     };
+  },
+  async mounted() {
+    const res = await this.$xhr('get', `${EXAM_LOGININFO}${this.id}`);
+    if (res.data.code === 0) {
+      this.examName = res.data.data.title;
+      this.illustrate = res.data.data.illustrate;
+    }
   },
 };
 </script>

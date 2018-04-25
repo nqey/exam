@@ -74,6 +74,8 @@ const EXAM_LOGIN = `${DECLARE_BASE_URL}publics/examinee/login`;
 const EXAM_ALLSUBJECTS = `${EXAM_BASE_URL}exams/declareexamination/allsubjects/`;
 // 考生答题提交
 const EXAM_SUBMISSION = `${EXAM_BASE_URL}/exams/declareexamination/submission`;
+// 登录页面获取 + id
+const EXAM_LOGININFO = `${EXAM_BASE_URL}/platform/declareexamination/logininfo/`;
 
 export {
   test,
@@ -86,4 +88,5 @@ export {
   EXAM_LOGIN,
   EXAM_ALLSUBJECTS,
   EXAM_SUBMISSION,
+  EXAM_LOGININFO,
 };

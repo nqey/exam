@@ -15,11 +15,11 @@
             <div class="col-md-6 col-md-offset-3">
               <div class="dfxx">
                 <ul>
-                  <li class="row clearfix">
+                  <li class="row clearfix" v-if="rs.single">
                     <div class="col-md-6">一、单选题：得分 <span class="color_qf">{{rs.single.score}}</span>分</div>
                     <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.single.errorSubjectSortList">{{v}}题&nbsp;</span></div>
                   </li>
-                  <li class="row clearfix">
+                  <li class="row clearfix" v-if="rs.multiple">
                     <div class="col-md-6">二、多选题：得分 <span class="color_qf">{{rs.multiple.score}}</span>分</div>
                     <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.multiple.errorSubjectSortList">{{v}}题&nbsp;</span></div>
                   </li>

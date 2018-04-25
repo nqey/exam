@@ -2,7 +2,9 @@
   <div>
     <header class="header">
       <div class="container">
-        <h2 class="text-center">中国商品诚信数据库第一批申报关考试</h2>
+        <h2 class="text-center">{{examName}}</h2>
+        <br/>
+        <p class="text-center">{{illustrate}}</p>
         <ul class="ksxx">
           <li>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：<span>{{username}}</span></li>
           <li>身份证号码：<span>{{idnumber}}</span></li>
@@ -131,6 +133,8 @@ export default {
       timeIco,
       endtime: 0,
       countdown: 0,
+      examName: '',
+      illustrate: '',
       singleQS: [],
       multipleQS: [],
       essayQS: [],
@@ -156,6 +160,8 @@ export default {
         this.multipleQS = subjectsMap.multiple || [];
         this.essayQS = subjectsMap.essay || [];
         this.beginTime = res.data.data.beginTime;
+        this.examName = res.data.data.examName;
+        this.illustrate = res.data.data.illustrate;
         if (this.singleQS) {
           this.singleQS.forEach((o) => {
             o.options = JSON.parse(o.content);
@@ -169,11 +175,11 @@ export default {
             });
           });
         }
+        this.endtime = new Date();
+        // 考试时间为两个小时
+        this.endtime.setMinutes(new Date().getMinutes() + res.data.data.duration);
+        setInterval(this.timer, 1000);
       }
-      this.endtime = new Date();
-      // 考试时间为两个小时
-      this.endtime.setHours(new Date().getHours() + 2);
-      setInterval(this.timer, 1000);
     },
     timer() {
       const nowtime = new Date();
@@ -181,7 +187,7 @@ export default {
       const totalsecond = Math.floor((this.endtime.getTime() - nowtime.getTime()) / 1000);
       // 当剩余秒数为0时提交表单
       if (totalsecond === 0) {
-        // $("#exam").submit();
+        this.submit();
       }
       // 剩余小时
       const remainhour = Math.floor(totalsecond / 3600);
