@@ -4,8 +4,9 @@ const test = (() => {
   } else if (/cpsdb.com/.test(window.location.hostname)) {
     return 'online';
   }
-  return 'online';
+  return 'local';
 })();
+const LOCAL_URL = '.test.com';
 const ENTERPRISE_BASE_URL = (() => {
   switch (test) {
     case 'test':
@@ -13,7 +14,7 @@ const ENTERPRISE_BASE_URL = (() => {
     case 'online':
       return '//ep.cpsdb.com/';
     default :
-      return '//ep.cpsdb61.com/';
+      return location.hostname;
   }
 })();
 const BASE_URL = (() => {
@@ -23,7 +24,7 @@ const BASE_URL = (() => {
     case 'online':
       return '//base.cpsdb.com/';
     default :
-      return '//base.cpsdb61.com/';
+      return location.hostname;
   }
 })();
 const EXAM_BASE_URL = (() => {
@@ -33,7 +34,7 @@ const EXAM_BASE_URL = (() => {
     case 'online':
       return '//exam.cpsdb.com/';
     default :
-      return '//exam.cpsdb61.com/';
+      return location.hostname;
   }
 })();
 const DECLARE_BASE_URL = (() => {
@@ -43,7 +44,7 @@ const DECLARE_BASE_URL = (() => {
     case 'online':
       return '//dec.cpsdb.com/';
     default :
-      return '//dec.cpsdb61.com/';
+      return location.hostname;
   }
 })();
 const IMAGE_SERVER_URL = (() => {
@@ -53,7 +54,7 @@ const IMAGE_SERVER_URL = (() => {
     case 'online':
       return '//pic.cpsdb.com/';
     default :
-      return '//pic.cpsdb61.com/';
+      return location.hostname;
   }
 })();
 const DOMAIN = (() => {
@@ -63,7 +64,7 @@ const DOMAIN = (() => {
     case 'online':
       return 'cpsdb.com';
     default :
-      return 'cpsdb61.com';
+      return location.hostname.indexOf(LOCAL_URL) >= 0 ? LOCAL_URL : location.hostname;
   }
 })();
 
@@ -78,6 +79,7 @@ const EXAM_SUBMISSION = `${EXAM_BASE_URL}/exams/declareexamination/submission`;
 const EXAM_LOGININFO = `${EXAM_BASE_URL}/platform/declareexamination/logininfo/`;
 
 export {
+  LOCAL_URL,
   test,
   ENTERPRISE_BASE_URL,
   BASE_URL,
