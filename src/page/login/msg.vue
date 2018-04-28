@@ -123,14 +123,14 @@ export default {
   margin-bottom: 40px;
   font-weight: bold;
 }
-.yz_correct button {
+.yz_correct .btn {
   background: #01c853;
   width: 240px;
-  color: #fff;
+  color: #fff !important;
   letter-spacing: 5px;
   border-radius: 18px;
 }
-.yz_correct button:hover {
+.yz_correct .btn:hover {
   background: #04b14b !important;
 }
 .ksxx {
