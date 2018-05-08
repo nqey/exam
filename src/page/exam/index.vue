@@ -18,23 +18,6 @@
         <fieldset>
           <div class="div_title_cut_question"><b>一、选择题</b></div>
           <div class="div_question"> 
-           <!--  <div class="div_table_radio_question">
-              <div class="div_title_question_all">
-                <div class="div_title_question"><span class="number">1、</span>我国铁路的轨距为1250mm。<span class="req">&nbsp;*（分值：5分）</span></div>
-              </div>
-              <ul class="ulradiocheck">
-                <li>
-                  <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <b>A、对</b> </label>
-                </li>
-                <li>
-                  <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <b>B、错</b> </label>
-                </li>
-              </ul>
-            </div> -->
             <div class="div_table_radio_question" v-for="(q, index) of singleQS">
               <div class="div_title_question_all">
                 <div class="div_title_question"><span class="number">{{index+1}}、</span>{{q.title}}<span class="req">&nbsp;*（分值：{{q.score}}分）</span></div>
@@ -61,38 +44,36 @@
                 </li>
               </ul>
             </div>
-            <!-- <div class="div_table_radio_question">
+          </div> 
+          <div class="div_title_cut_question"><b>二、判断题</b></div>
+          <div class="div_question"> 
+            <div class="div_table_radio_question" v-for="(q, index) of judgeQS">
               <div class="div_title_question_all">
-                <div class="div_title_question"><span class="number">2、</span><span class="color_qf">[多选题]</span>从业人员有权（  ）违章指挥和强令冒险作业。<span class="req">&nbsp;*（分值：5分）</span></div>
+                <div class="div_title_question"><span class="number">{{index+1}}、</span>{{q.title}}<span class="req">&nbsp;*（分值：{{q.score}}分）</span></div>
               </div>
               <ul class="ulradiocheck">
-                <li>
+                <li v-for="(o, oi) of q.options">
                   <label class="radio-inline">
-                    <input type="radio" name="1" id="inlineRadio1" value="option1">
-                    <b>A、拒绝</b> </label>
-                </li>
-                <li>
-                  <label class="radio-inline">
-                    <input type="radio" name="2" id="inlineRadio2" value="option2">
-                    <b>B、抵制</b> </label>
-                </li>
-                <li>
-                  <label class="radio-inline">
-                    <input type="radio" name="3" id="inlineRadio3" value="option3">
-                    <b>C、抗拒</b> </label>
+                    <input type="radio" :value="oi" :name="'fill' + index" v-model="q.answer"/>
+                    <b>{{optionMap[oi]}}、{{o.option}}</b>
+                  </label>
                 </li>
               </ul>
             </div>
-            -->
           </div> 
-          <div class="div_title_cut_question" v-if="essayQS.length > 0"><b>二、简答题</b></div>
-          <div class="div_question" v-if="essayQS.length > 0"> 
-            <!-- <div class="div_table_radio_question">
+          <div class="div_title_cut_question"><b>三、填空题</b></div>
+          <div class="div_question"> 
+            <div class="div_table_radio_question" v-for="(e, index) of fillQS">
               <div class="div_title_question_all">
-                <div class="div_title_question"><span class="number">1、</span>对中国商品诚信数据库的了解。<span class="req">&nbsp;*（分值：10分）</span></div>
+                <div class="div_title_question">
+                  <span class="number">{{index+1}}、</span>{{e.title}}<span class="req">&nbsp;*（分值：{{e.score}}分）</span>
+                </div>
               </div>
-              <textarea title="" class="inputtext" placeholder="请输入内容"></textarea>
-            </div> -->
+              <input class="inputtext inputtext_ck" placeholder="请输入内容 " v-model="e.answer"></input>
+            </div>
+          </div>
+          <div class="div_title_cut_question"><b>四、简答题</b></div>
+          <div class="div_question"> 
             <div class="div_table_radio_question" v-for="(e, index) of essayQS">
               <div class="div_title_question_all">
                 <div class="div_title_question">
@@ -138,6 +119,8 @@ export default {
       singleQS: [],
       multipleQS: [],
       essayQS: [],
+      judgeQS: [],
+      fillQS: [],
       beginTime: 0,
       optionMap: [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -146,6 +129,8 @@ export default {
       username: window.sessionStorage.getItem('username'),
       idnumber: window.sessionStorage.getItem('idnumber'),
       cellphone: window.sessionStorage.getItem('cellphone'),
+      clearTimer: null,
+      key: `${window.sessionStorage.getItem('cellphone')}-endTime`,
     };
   },
   methods: {
@@ -159,11 +144,18 @@ export default {
         this.singleQS = subjectsMap.single || [];
         this.multipleQS = subjectsMap.multiple || [];
         this.essayQS = subjectsMap.essay || [];
+        this.judgeQS = subjectsMap.judge || [];
+        this.fillQS = subjectsMap.fill || [];
         this.beginTime = res.data.data.beginTime;
         this.examName = res.data.data.examName;
         this.illustrate = res.data.data.illustrate;
         if (this.singleQS) {
           this.singleQS.forEach((o) => {
+            o.options = JSON.parse(o.content);
+          });
+        }
+        if (this.judgeQS) {
+          this.judgeQS.forEach((o) => {
             o.options = JSON.parse(o.content);
           });
         }
@@ -175,9 +167,14 @@ export default {
             });
           });
         }
-        this.endtime = new Date();
+        // this.endtime = new Date();
         // 考试时间为两个小时
-        this.endtime.setMinutes(new Date().getMinutes() + res.data.data.duration);
+        // this.endtime.setMinutes(new Date().getMinutes() + res.data.data.duration);
+        const sessionKeyEndTime = window.sessionStorage.getItem(this.key);
+        window.sessionStorage.setItem(this.key, this.beginTime);
+        if (!sessionKeyEndTime || (sessionKeyEndTime < this.beginTime)) {
+          window.sessionStorage.setItem(this.key, this.beginTime);
+        }
         setInterval(this.timer, 1000);
       }
     },
@@ -186,8 +183,9 @@ export default {
       // 计算剩余秒数
       const totalsecond = Math.floor((this.endtime.getTime() - nowtime.getTime()) / 1000);
       // 当剩余秒数为0时提交表单
-      if (totalsecond === 0) {
-        this.submit();
+      if (totalsecond <= 0) {
+        clearInterval(this.clearTimer);
+        // this.submit();
       }
       // 剩余小时
       const remainhour = Math.floor(totalsecond / 3600);
@@ -213,7 +211,13 @@ export default {
       param.examinationId = this.id;
       param.certificate = this.idnumber;
       param.beginTime = this.beginTime;
-      param.answerList = JSON.stringify([...this.singleQS, ...this.multipleQS, ...this.essayQS]);
+      param.answerList = JSON.stringify([
+        ...this.singleQS,
+        ...this.multipleQS,
+        ...this.essayQS,
+        ...this.fillQS,
+        ...this.judgeQS,
+      ]);
       param.answerList = JSON.parse(param.answerList);
       param.answerList.forEach((d, i) => {
         d.subjectSort = i + 1;

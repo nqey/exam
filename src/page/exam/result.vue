@@ -25,12 +25,16 @@
                     <div class="col-md-6">二、多选题：得分 <span class="color_qf">{{rs.multiple.score}}</span>分</div>
                     <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.multiple.errorSubjectSortList">{{v}}题&nbsp;</span></div>
                   </li>
-            <!--       <li class="row clearfix">
-                    <div class="col-md-6">三、判断题：得分 <span class="color_qf">35</span>分</div>
-                    <div class="col-md-6">错误题号：<span class="green">无</span></div>
-                  </li> -->
                   <li class="row clearfix">
-                    <div class="col-md-12">四、简答题：(需要人工评分,请关注申报机构公共业务后台查询最终分数)</div>
+                     <div class="col-md-6">三、判断题：得分 <span class="color_qf">{{rs.judge.score}}</span>分</div>
+                    <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.judge.errorSubjectSortList">{{v}}题&nbsp;</span></div>
+                  </li>
+                   <li class="row clearfix">
+                     <div class="col-md-6">四、填空题：得分 <span class="color_qf">{{rs.fill.score}}</span>分</div>
+                    <div class="col-md-6">错误题号：<span class="red" v-for="v of rs.fill.errorSubjectSortList">{{v}}题&nbsp;</span></div>
+                  </li>
+                  <li class="row clearfix">
+                    <div class="col-md-12">五、简答题：(需要人工评分,请关注申报机构公共业务后台查询最终分数)</div>
                   </li>
                 </ul>
               </div>
