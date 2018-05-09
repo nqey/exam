@@ -105,7 +105,6 @@
 <script>
 import { EXAM_ALLSUBJECTS, EXAM_SUBMISSION } from '@/config/env';
 import timeIco from '@/assets/img/time_ico.png';
-import { formatDate } from '@/config/utils';
 
 export default {
   name: 'exam',
@@ -130,7 +129,9 @@ export default {
       idnumber: window.sessionStorage.getItem('idnumber'),
       cellphone: window.sessionStorage.getItem('cellphone'),
       clearTimer: null,
-      key: `${window.sessionStorage.getItem('cellphone')}-endTime`,
+      totalsecond: null,
+      endtimeKey: `${window.sessionStorage.getItem('cellphone')}-endTime`,
+      sartTimeKey: `${window.sessionStorage.getItem('cellphone')}-sartTime`,
     };
   },
   methods: {
@@ -139,14 +140,14 @@ export default {
       if (res.data.code === 0) {
         const subjectsMap = res.data.data.subjectsMap;
         this.name = res.data.data.name;
-        this.submitTime = formatDate(new Date(res.data.data.submitTime), 'yyyy-MM-dd hh:mm:ss');
+        // this.submitTime = formatDate(new Date(res.data.data.submitTime), 'yyyy-MM-dd hh:mm:ss');
         this.score = res.data.data.examinationScore;
         this.singleQS = subjectsMap.single || [];
         this.multipleQS = subjectsMap.multiple || [];
         this.essayQS = subjectsMap.essay || [];
         this.judgeQS = subjectsMap.judge || [];
         this.fillQS = subjectsMap.fill || [];
-        this.beginTime = res.data.data.beginTime;
+        // this.beginTime = res.data.data.beginTime;
         this.examName = res.data.data.examName;
         this.illustrate = res.data.data.illustrate;
         if (this.singleQS) {
@@ -170,29 +171,32 @@ export default {
         // this.endtime = new Date();
         // 考试时间为两个小时
         // this.endtime.setMinutes(new Date().getMinutes() + res.data.data.duration);
-        const sessionKeyEndTime = window.sessionStorage.getItem(this.key);
-        window.sessionStorage.setItem(this.key, this.beginTime);
-        if (!sessionKeyEndTime || (sessionKeyEndTime < this.beginTime)) {
-          window.sessionStorage.setItem(this.key, this.beginTime);
+        let endtimeKey = window.sessionStorage.getItem(this.endtimeKey);
+        let sartTimeKey = window.sessionStorage.getItem(this.sartTimeKey);
+        window.sessionStorage.setItem(this.sartTimeKey, res.data.data.beginTime);
+        if (!endtimeKey) {
+          window.sessionStorage.setItem(this.endtimeKey, res.data.data.submitTime);
         }
-        setInterval(this.timer, 1000);
+        endtimeKey = window.sessionStorage.getItem(this.endtimeKey);
+        sartTimeKey = window.sessionStorage.getItem(this.sartTimeKey);
+        this.totalsecond = Math.floor((endtimeKey - sartTimeKey) / 1000);
+        this.clearTimer = setInterval(this.timer, 1000);
       }
     },
     timer() {
-      const nowtime = new Date();
       // 计算剩余秒数
-      const totalsecond = Math.floor((this.endtime.getTime() - nowtime.getTime()) / 1000);
+      this.totalsecond -= 1;
       // 当剩余秒数为0时提交表单
-      if (totalsecond <= 0) {
+      if (this.totalsecond <= 0) {
         clearInterval(this.clearTimer);
-        // this.submit();
+        this.submit();
       }
       // 剩余小时
-      const remainhour = Math.floor(totalsecond / 3600);
+      const remainhour = Math.floor(this.totalsecond / 3600);
       // 剩余分钟
-      const remainminite = Math.floor((totalsecond - 3600 * remainhour) / 60);
+      const remainminite = Math.floor((this.totalsecond - 3600 * remainhour) / 60);
       // 剩余秒数
-      const remainsecond = Math.floor(totalsecond - 3600 * remainhour - 60 * remainminite);
+      const remainsecond = Math.floor(this.totalsecond - 3600 * remainhour - 60 * remainminite);
       this.countdown = `${remainhour}:${remainminite}:${remainsecond}`;
     },
     async submit() {
@@ -234,6 +238,7 @@ export default {
         window.sessionStorage.setItem('examName', this.examName);
         window.sessionStorage.setItem('illustrate', this.illustrate);
         this.$router.push('/exam/result');
+        window.sessionStorage.clear();
       }
     },
   },
